@@ -1,0 +1,89 @@
+{% extends "app/structure/base.html" %}
+
+{% block listContent %}
+<section class="vh-100" style="background-color: #eee;">
+	<div class="container py-5 h-100">
+	  <div class="row d-flex justify-content-center align-items-center h-100">
+		<div class="col col-lg-9 col-xl-7">
+		  <div class="card rounded-3">
+			<div class="card-body p-4">
+
+			  <h4 class="text-center my-3 pb-3">To Do App</h4>
+
+			  <form method="get" action="{%url 'addingItem'%}" class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
+				<div class="col-12">
+				  <button type="submit" class="btn btn-primary">New task</button>
+				</div>
+
+			  </form>
+
+			  <table class="table mb-4">
+				<thead>
+				  <tr>
+					<th scope="col">No.</th>
+					<th scope="col">Todo item</th>
+					<th scope="col">Status</th>
+					<th scope="col">Actions</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for item in items %}
+					<tr>
+						<th scope="row">{{ item.id }}</th>
+						{% if item.status == "D" %}
+							<td><a style="text-decoration: line-through;" href="/itemDetails/{{ item.id }}">{{ item.title }}</td>
+						{% else %}
+							<td><a href="/itemDetails/{{ item.id }}">{{ item.title }}</td>
+						{% endif %}
+
+						<td>{{ item.get_status_display }}</td>
+						<td class="">
+							<div class="d-flex">
+								<form method="post" action="deleteItem/{{item.id}}">
+									{% csrf_token %}
+									<button type="submit" class="btn btn-danger">Delete</button>
+								</form>
+								{% comment %} <p>{{item.status}}</p> {% endcomment %}
+								{% if item.status == "In progress" or item.status == "P" %}
+									<form class="mx-3" method="post" action="setAsFinished/{{ item.id }}">
+										{% csrf_token %}
+										<button type="submit" class="btn btn-success ms-1">Finished</button>
+									</form>
+								{% else %}
+									<form class="mx-3" method="post" action="setAsFinished/{{ item.id }}">
+										{% csrf_token %}
+										<button type="submit" class="btn btn-info ms-1">Not yet</button>
+									</form>
+								{% endif %}
+							</div>
+						</td>
+					</tr>
+					{% endfor%}
+				  {% comment %} <tr>
+					<th scope="row">2</th>
+					<td>Renew car insurance</td>
+					<td>In progress</td>
+					<td>
+					  <button type="submit" class="btn btn-danger">Delete</button>
+					  <button type="submit" class="btn btn-success ms-1">Finished</button>
+					</td>
+				  </tr>
+				  <tr>
+					<th scope="row">3</th>
+					<td>Sign up for online course</td>
+					<td>In progress</td>
+					<td>
+					  <button type="submit" class="btn btn-danger">Delete</button>
+					  <button type="submit" class="btn btn-success ms-1">Finished</button>
+					</td>
+				  </tr> {% endcomment %}
+				</tbody>
+			  </table>
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+</section>
+{% endblock %}

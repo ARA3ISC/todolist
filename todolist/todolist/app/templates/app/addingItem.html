@@ -1,0 +1,17 @@
+{% extends 'app/structure/base.html' %}
+
+{% block titile %} Create task {% endblock %}
+
+{% block addItem %}
+<div style="padding: 40px;">
+	<h1>Creating new task </h1><br>
+	<br>
+	<form method="post" action="{% url 'createTask' %}">
+		{{ addingForm }}
+		<br>
+		{% csrf_token %}
+		<button style="width: 200px;" type="submit" class="btn btn-outline-primary">Create</button>
+	</form>
+</div>
+
+{% endblock %}
